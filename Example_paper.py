@@ -167,17 +167,18 @@ print(' ')
 print('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')    
 ########################################################
 #draw quantities
-legendnamesPV= [f'Node {i + 1}' for i in range(NPV)]
+legendnamesPV     = [f'Node {i + 1}' for i in range(NPV)]
+legendnamesPVmean = np.append(legendnamesPV,'mean value')
 ########################################################
 Pii       = np.real(np.squeeze(S*ese))
 Qii       = np.imag(np.squeeze(S*ese))
 # fpii      =  np.abs(np.real(np.squeeze(ese)))/np.abs(np.squeeze(ese))
 
-fig, axes = plt.subplots(1,2,figsize=(10 * 2 / 2.54, 5 * 2 / 2.54))
+fig, axes = plt.subplots(1,2,figsize=(15 * 2 / 2.54, 5 * 2 / 2.54))
 axes[0].plot(t / 60, np.transpose(Pii))
 axes[1].plot(t / 60, np.transpose(Qii))
-axes[0].set_title('Active power at PQ nodes')
-axes[1].set_title('Reactive power at PQ nodes')
+axes[0].set_title('Active power at non reg. nodes')
+axes[1].set_title('Reactive power at non reg. nodes')
 
 axes[0].text(-0.1, 1.07, 'a)', transform=axes[0].transAxes, fontsize=14, va='top', ha='left')
 axes[1].text(-0.1, 1.07, 'b)', transform=axes[1].transAxes, fontsize=14, va='top', ha='left')
@@ -198,12 +199,12 @@ fig.savefig(file_name+'.eps', format='eps', bbox_inches='tight')
 DabsVePQ = 1000*(np.abs(ve)-1)
 FaseVePQ = np.angle(ve)*180/np.pi*1000
 
-fig, axes = plt.subplots(1,2,figsize=(10 * 2 / 2.54, 5 * 2 / 2.54))
+fig, axes = plt.subplots(1,2,figsize=(15 * 2 / 2.54, 5 * 2 / 2.54))
 axes[0].plot(t / 60, np.transpose(DabsVePQ))
 axes[1].plot(t / 60, np.transpose(FaseVePQ))
 
-axes[0].set_title('Voltage deviations at PQ nodes')
-axes[1].set_title('Voltage phases at PQ nodes')
+axes[0].set_title('Voltage dev. at non reg. nodes')
+axes[1].set_title('Voltage phases at non reg. nodes')
 
 axes[0].text(-0.1, 1.07, 'a)', transform=axes[0].transAxes, fontsize=14, va='top', ha='left')
 axes[1].text(-0.1, 1.07, 'b)', transform=axes[1].transAxes, fontsize=14, va='top', ha='left')
@@ -228,16 +229,16 @@ FaseVePV = np.angle(vePV)*180/np.pi*1000
 meanDabsVePV = np.mean(DabsVePV, axis=0)
 meanFaseVePV = np.mean(FaseVePV, axis=0)
 
-fig, axes = plt.subplots(1,2,figsize=(10 * 2 / 2.54, 5 * 2 / 2.54))
+fig, axes = plt.subplots(1,2,figsize=(15 * 2 / 2.54, 5 * 2 / 2.54))
 axes[0].plot(t / 60, np.transpose(DabsVePV))
 axes[0].plot(t / 60, np.transpose(meanDabsVePV),linestyle=':')
 
 axes[1].plot(t / 60, np.transpose(FaseVePV))
 axes[1].plot(t / 60, np.transpose(meanFaseVePV),linestyle=':')
-fig.legend(legendnamesPV, loc='center', ncol=NPV, bbox_to_anchor=(0.5, -0.1), frameon=False)
+fig.legend(legendnamesPVmean, loc='center', ncol=NPV+1, bbox_to_anchor=(0.5, -0.1), frameon=False)
 
-axes[0].set_title('Voltage deviations at PV nodes')
-axes[1].set_title('Voltage phases at PV nodes')
+axes[0].set_title('Voltage dev. at reg. nodes')
+axes[1].set_title('Voltage phases at reg. nodes')
 
 axes[0].text(-0.1, 1.07, 'a)', transform=axes[0].transAxes, fontsize=14, va='top', ha='left')
 axes[1].text(-0.1, 1.07, 'b)', transform=axes[1].transAxes, fontsize=14, va='top', ha='left')
@@ -260,19 +261,19 @@ fig.savefig(file_name+'.eps', format='eps', bbox_inches='tight')
 P_PV = np.real(np.squeeze(S*bars0))
 Q_PV = np.imag(np.squeeze(S*bars0))
 
-fig, axes = plt.subplots(1,2,figsize=(10 * 2 / 2.54, 5 * 2 / 2.54))
+fig, axes = plt.subplots(1,2,figsize=(15 * 2 / 2.54, 5 * 2 / 2.54))
 axes[0].plot(t / 60, np.transpose(P_PV))
 axes[1].plot(t / 60, np.transpose(Q_PV))
 fig.legend(legendnamesPV, loc='center', ncol=NPV, bbox_to_anchor=(0.5, -0.1), frameon=False)
 
-axes[0].set_title('Active power at PV nodes')
-axes[1].set_title('Reactive power at PV nodes')
+axes[0].set_title('Active power at reg. nodes')
+axes[1].set_title('Reactive power at reg. nodes')
 
 axes[0].text(-0.1, 1.07, 'a)', transform=axes[0].transAxes, fontsize=14, va='top', ha='left')
 axes[1].text(-0.1, 1.07, 'b)', transform=axes[1].transAxes, fontsize=14, va='top', ha='left')
 
-axes[0].set_ylabel(r'$P_{PV} (kW)$')
-axes[1].set_ylabel(r'$Q_{PV} (kVA)$')
+axes[0].set_ylabel(r'$P_{Reg} (kW)$')
+axes[1].set_ylabel(r'$Q_{Reg} (kVA)$')
 
 for ax in axes.flat:
     ax.set_xlim(0, t[-1]/60)
@@ -288,10 +289,10 @@ fig.savefig(file_name+'.eps', format='eps', bbox_inches='tight')
 ########################################################
 E0000  = T*np.cumsum(np.real(np.squeeze(bars0)), axis=1)/60
 
-fig, axes = plt.subplots(1,2,figsize=(10 * 2 / 2.54, 5 * 2 / 2.54))
+fig, axes = plt.subplots(1,2,figsize=(15 * 2 / 2.54, 5 * 2 / 2.54))
 axes[0].plot(t / 60, np.transpose(E0000))
 fig.legend(legendnamesPV, loc='center', ncol=NPV, bbox_to_anchor=(0.5, -0.1), frameon=False)
-axes[0].set_title('Energy at PV nodes')
+axes[0].set_title('Energy at reg. nodes')
 
 axes[0].text(-0.1, 1.07, 'a)', transform=axes[0].transAxes, fontsize=14, va='top', ha='left')
 axes[0].set_ylabel(r'$E_{0} (kWhr)$')
@@ -417,13 +418,15 @@ ve          = np.zeros((NPQ, nn), dtype=complex) #load & DG nodes
 vePV        = np.zeros((NPV, nn), dtype=complex) # Sources!
 # vePVctrl    = np.ones((NPV, 1), dtype=complex) #expm(1j * np.diag( np.random.normal(0,0.00001,NPV)))   @ (np.random.normal(1,0.000001,NPV) .reshape(NPV,1))
 vePVctrl    = vePVinic #np.ones((NPV, 1), dtype=complex)
-uuant       = np.zeros((NPV, 1), dtype=complex)
 
 vePVabs2com = np.abs(vePVctrl)**2
 
 ese         = np.zeros((NPQ, nn), dtype=complex)
 bars0       = np.zeros((NPV, nn), dtype=complex)
 bars0com    = bars0[:,0]
+
+vememory    = np.ones((NPV, 1), dtype=complex)
+Smemory     = np.zeros((NPV, 1), dtype=complex)
 
 hPV         = np.conj(barY0)@(vePVctrl)
 
@@ -500,13 +503,17 @@ for kk in range(nn):
                 vePVctrl[ii] = 1
             else:
                 ##############################################
-                #MediciOn
-                Vkk             = np.conj(vePV_mes[ii,ii])*vePV[ii, kk]
+                #memory
+                Vkk             = vememory[ii]
                 Vkkabs          = abs(Vkk)
-                Skk             = -bars0[ii, kk] #injected or consumed?
+                Skk             = Smemory[ii]
+                ##############################################
+                #MediciOn
+                vememory[ii]   = np.conj(vePV_mes[ii,ii])*vePV[ii, kk]
+                Smemory[ii]    = -bars0[ii, kk] #injected or consumed?
                 ##############################################
                 #ComunicaciOn S
-                bars0com[ii]    = Skk
+                bars0com[ii]    = Smemory[ii]
                 ##############################################
                 #AcciOn u
                 nu              = mm.T@(vePVabs2com ) - 1 
@@ -534,12 +541,12 @@ print('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
 DabsVePQ = 1000*(np.abs(ve)-1)
 FaseVePQ = np.angle(ve)*180/np.pi*1000
 
-fig, axes = plt.subplots(1,2,figsize=(10 * 2 / 2.54, 5 * 2 / 2.54))
+fig, axes = plt.subplots(1,2,figsize=(15 * 2 / 2.54, 5 * 2 / 2.54))
 axes[0].plot(t / 60, np.transpose(DabsVePQ))
 axes[1].plot(t / 60, np.transpose(FaseVePQ))
 
-axes[0].set_title('Voltage deviations at PQ nodes')
-axes[1].set_title('Voltage phases at PQ nodes')
+axes[0].set_title('Voltage dev. at non reg. nodes')
+axes[1].set_title('Voltage phases at non reg. nodes')
 
 axes[0].text(-0.1, 1.07, 'a)', transform=axes[0].transAxes, fontsize=14, va='top', ha='left')
 axes[1].text(-0.1, 1.07, 'b)', transform=axes[1].transAxes, fontsize=14, va='top', ha='left')
@@ -564,16 +571,16 @@ FaseVePV = np.angle(vePV)*180/np.pi*1000
 meanDabsVePV = np.mean(DabsVePV, axis=0)
 meanFaseVePV = np.mean(FaseVePV, axis=0)
 
-fig, axes = plt.subplots(1,2,figsize=(10 * 2 / 2.54, 5 * 2 / 2.54))
+fig, axes = plt.subplots(1,2,figsize=(15 * 2 / 2.54, 5 * 2 / 2.54))
 axes[0].plot(t / 60, np.transpose(DabsVePV))
 axes[0].plot(t / 60, np.transpose(meanDabsVePV),linestyle=':')
 axes[1].plot(t / 60, np.transpose(FaseVePV))
 axes[1].plot(t / 60, np.transpose(meanFaseVePV),linestyle=':')
 
-fig.legend(legendnamesPV, loc='center', ncol=NPV, bbox_to_anchor=(0.5, -0.1), frameon=False)
+fig.legend(legendnamesPVmean, loc='center', ncol=NPV+1, bbox_to_anchor=(0.5, -0.1), frameon=False)
 
-axes[0].set_title('Voltage deviations at PV nodes')
-axes[1].set_title('Voltage phases at PV nodes')
+axes[0].set_title('Voltage dev. at reg. nodes')
+axes[1].set_title('Voltage phases at reg. nodes')
 
 axes[0].text(-0.1, 1.07, 'a)', transform=axes[0].transAxes, fontsize=14, va='top', ha='left')
 axes[1].text(-0.1, 1.07, 'b)', transform=axes[1].transAxes, fontsize=14, va='top', ha='left')
@@ -595,20 +602,20 @@ fig.savefig(file_name+'.eps', format='eps', bbox_inches='tight')
 P_PV = np.real(np.squeeze(S*bars0))
 Q_PV = np.imag(np.squeeze(S*bars0))
 
-fig, axes = plt.subplots(1,2,figsize=(10 * 2 / 2.54, 5 * 2 / 2.54))
+fig, axes = plt.subplots(1,2,figsize=(15 * 2 / 2.54, 5 * 2 / 2.54))
 axes[0].plot(t / 60, np.transpose(P_PV))
 axes[1].plot(t / 60, np.transpose(Q_PV))
 
 fig.legend(legendnamesPV, loc='center', ncol=NPV, bbox_to_anchor=(0.5, -0.1), frameon=False)
 
-axes[0].set_title('Active power at PV nodes')
-axes[1].set_title('Reactive power at PV nodes')
+axes[0].set_title('Active power at reg. nodes')
+axes[1].set_title('Reactive power at reg. nodes')
 
 axes[0].text(-0.1, 1.07, 'a)', transform=axes[0].transAxes, fontsize=14, va='top', ha='left')
 axes[1].text(-0.1, 1.07, 'b)', transform=axes[1].transAxes, fontsize=14, va='top', ha='left')
 
-axes[0].set_ylabel(r'$P_{PV} (kW)$')
-axes[1].set_ylabel(r'$Q_{PV} (kVA)$')
+axes[0].set_ylabel(r'$P_{Reg} (kW)$')
+axes[1].set_ylabel(r'$Q_{Reg} (kVA)$')
 
 for ax in axes.flat:
     ax.set_xlim(0, t[-1]/60)
@@ -623,10 +630,10 @@ fig.savefig(file_name+'.eps', format='eps', bbox_inches='tight')
 ########################################################
 E0000  = T*np.cumsum(np.real(np.squeeze(bars0)), axis=1)/60
 
-fig, axes = plt.subplots(1,2,figsize=(10 * 2 / 2.54, 5 * 2 / 2.54))
+fig, axes = plt.subplots(1,2,figsize=(15 * 2 / 2.54, 5 * 2 / 2.54))
 axes[0].plot(t / 60, np.transpose(E0000))
 fig.legend(legendnamesPV, loc='center', ncol=NPV, bbox_to_anchor=(0.5, -0.1), frameon=False)
-axes[0].set_title('Energy at PV nodes')
+axes[0].set_title('Energy at reg. nodes')
 
 axes[0].text(-0.1, 1.07, 'a)', transform=axes[0].transAxes, fontsize=14, va='top', ha='left')
 axes[0].set_ylabel(r'$E_{0} (kWhr)$')
@@ -642,18 +649,21 @@ fig.tight_layout()
 file_name = 'closed_E_PV'
 fig.savefig(file_name+'.eps', format='eps', bbox_inches='tight')
 ########################################################
-ee = np.linalg.norm(TTT@np.squeeze(S*bars0), axis=0)
-fig, axes = plt.subplots(1,2,figsize=(10 * 2 / 2.54, 5 * 2 / 2.54))
-axes[0].plot(t / 60, np.transpose(ee))
-axes[1].plot(t / 60, np.squeeze(1000000*realbkbk))
+ee = TTT@np.squeeze(S*bars0)
+abseeP = np.linalg.norm(np.real(ee), axis=0)
+abseeQ = np.linalg.norm(np.imag(ee), axis=0)
+fig, axes = plt.subplots(1,2,figsize=(15 * 2 / 2.54, 5 * 2 / 2.54))
+axes[0].plot(t / 60, np.transpose(abseeP))
+axes[1].plot(t / 60, np.transpose(abseeQ))
 
-axes[0].set_title(r'Norm of power error')
-axes[1].set_title(r'Deviation eigenvalue $\times 10^6$')
+axes[0].set_title(r'Norm of active power error')
+axes[1].set_title(r'Norm of reactive power error')
 
 axes[0].text(-0.1, 1.07, 'a)', transform=axes[0].transAxes, fontsize=14, va='top', ha='left')
 axes[1].text(-0.1, 1.07, 'b)', transform=axes[1].transAxes, fontsize=14, va='top', ha='left')
 
-axes[0].set_ylabel(r'$\|e\| (kVA)$')
+axes[0].set_ylabel(r'$\|real\{e\}\|  (kW)$')
+axes[1].set_ylabel(r'$\|imag\{e\}\| (kVA)$')
 
 for ax in axes.flat:
     ax.set_xlim(0, t[-1]/60)
@@ -663,5 +673,213 @@ for ax in axes.flat:
     ax.set_xlabel('Day Time (hrs)')
 fig.tight_layout()
 
-file_name = 'closed_eenu_PV'
+file_name = 'closed_ee_PV'
+fig.savefig(file_name+'.eps', format='eps', bbox_inches='tight')
+########################################################
+absVPV = np.abs(vePV)**2 - 1
+nuu    = mm.T@absVPV
+maxnu  = np.max(absVPV,axis=0)
+minnu  = np.min(absVPV,axis=0)
+
+fig, axes = plt.subplots(1,2,figsize=(15 * 2 / 2.54, 5 * 2 / 2.54))
+axes[0].plot(t / 60, np.transpose(nuu))
+axes[0].plot(t / 60, np.transpose(maxnu),linestyle=':', linewidth=1.00)
+axes[0].plot(t / 60, np.transpose(minnu),linestyle=':', linewidth=1.00)
+axes[1].plot(t / 60, np.squeeze(1000000*realbkbk))
+
+axes[0].set_title(r'Dev. of quadratic reg. voltages')
+axes[1].set_title(r'Dev. eigenvalue $\times 10^6$')
+
+axes[0].text(-0.1, 1.07, 'a)', transform=axes[0].transAxes, fontsize=14, va='top', ha='left')
+axes[1].text(-0.1, 1.07, 'b)', transform=axes[1].transAxes, fontsize=14, va='top', ha='left')
+
+axes[0].set_ylabel(r'$\nu$')
+
+axes[0].legend([r'$\nu$', r'$max\{ V_0V_0^*-I\}$', r'$min\{ V_0V_0^*-I\}$'], 
+               loc='lower center',  # Places legend inside, at the lower center
+               ncol=3,  # Arranges items in a single horizontal row
+               frameon=True)  # Optional: Adds a frame around the legend
+
+# axes[0].set_ylim(np.min(nuu), np.max(nuu))
+
+for ax in axes.flat:
+    ax.set_xlim(0, t[-1]/60)
+    ax.grid(True)
+    ax.set_xticks(custom_ticks)
+    ax.set_xticklabels(custom_labels)
+    ax.set_xlabel('Day Time (hrs)')
+fig.tight_layout()
+
+file_name = 'closed_nu_PV'
+fig.savefig(file_name+'.eps', format='eps', bbox_inches='tight')
+########################################################
+# DROOP CTRL
+print('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
+print("Droop Control Closed Loop")
+print('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
+########################################################
+#Droop gains
+DD = 0.0001*np.ones((NPV, 1))
+########################################################
+#prefill new vectors and matrices
+ve          = np.zeros((NPQ, nn), dtype=complex) #load & DG nodes
+vePV        = np.zeros((NPV, nn), dtype=complex) # Sources!
+vePVctrl    = vePVinic #np.ones((NPV, 1), dtype=complex)
+
+ese         = np.zeros((NPQ, nn), dtype=complex)
+bars0       = np.zeros((NPV, nn), dtype=complex)
+bars0com    = bars0[:,0]
+
+hPV         = np.conj(barY0)@(vePVctrl)
+
+########################################################
+#loop through time
+for kk in range(nn):
+    ##################################
+    #instante
+    tt = t[kk]
+    if tt==0:
+        kinit = kk
+    print(f'\033[KProgreso: {int(np.round(100*kk/nn))}%            ',end='\r',flush=True)
+    ##################################
+    #Power balance
+    Pbalance = Ppv[:, kk] - Pload[:, kk]
+    Qbalance = Qpv[:, kk] - Qload[:, kk]
+    
+    barS = Pbalance + 1j * Qbalance
+    ese[:, kk] = barS
+    barS = np.diag(barS)
+    ##################################
+    #impose voltages at PV nodes
+    vePV[:, kk] = np.squeeze(vePV_mes@vePVctrl)
+    V00         = np.diag(np.squeeze(vePVctrl)) 
+    hPV         = np.conj(barY0)@(vePVctrl)
+    ##################################
+    # NR for voltage in PQ nodes
+    veaux     = tm.NRI(barY, hPV, barS, Vinic, itmax, prec)
+    ve[:, kk] = veaux
+    VVV       = np.diag(veaux)
+    Vinic     = np.diag(veaux)#initial conditions for next iteration
+    ##################################
+    #power at PV nodes
+    eseaux =   V00@np.conj(barY00)@np.conj(V00)@np.ones((NPV, 1)) + V00@np.conj(barY0.T)@np.conj(VVV)@np.ones((NPQ, 1))
+    bars0[:, kk] = np.squeeze(eseaux)
+    ##################################
+    #Control voltages at PV nodes
+    for ii in range(NPV):          
+        ###############################
+        #control primario
+        rr1 = (kk-delay1[ii])%ctrlsteps1[ii]
+        if rr1 == 0:
+            if tt<-1.0*24*60:
+                vePVctrl[ii] = 1
+            else:
+                ##############################################
+                #MediciOn
+                Vkk             = np.conj(vePV_mes[ii,ii])*vePV[ii, kk]
+                Skk             = -bars0[ii, kk] #injected or consumed?
+                ##############################################
+                #AcciOn u
+                uuii            = -DD[ii]*Skk
+                ##############################################
+                #actualizar ctrl
+                # vePVctrl[ii]    = Vkk + T1real[ii]*uuii
+                vePVctrl[ii]    = 1 + uuii
+                # vePVctrl[ii]    = uuii
+print('\033[K              \r')
+# time.sleep(1)
+print(' ')
+print('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
+########################################################
+DabsVePQ = 1000*(np.abs(ve)-1)
+FaseVePQ = np.angle(ve)*180/np.pi*1000
+
+fig, axes = plt.subplots(1,2,figsize=(15 * 2 / 2.54, 5 * 2 / 2.54))
+axes[0].plot(t / 60, np.transpose(DabsVePQ))
+axes[1].plot(t / 60, np.transpose(FaseVePQ))
+
+axes[0].set_title('Voltage dev. at non reg. nodes')
+axes[1].set_title('Voltage phases at non reg. nodes')
+
+axes[0].text(-0.1, 1.07, 'a)', transform=axes[0].transAxes, fontsize=14, va='top', ha='left')
+axes[1].text(-0.1, 1.07, 'b)', transform=axes[1].transAxes, fontsize=14, va='top', ha='left')
+
+axes[0].set_ylabel(r'$\Delta V (‰)$')
+axes[1].set_ylabel(r'$\angle V (10^{-3}\times 1\degree)$')
+
+for ax in axes.flat:
+    ax.set_xlim(0, t[-1]/60)
+    ax.grid(True)
+    ax.set_xticks(custom_ticks)
+    ax.set_xticklabels(custom_labels)
+    ax.set_xlabel('Day Time (hrs)')
+fig.tight_layout()
+
+file_name = 'droop_V_PQ'
+fig.savefig(file_name+'.eps', format='eps', bbox_inches='tight')
+
+########################################################
+DabsVePV = 1000*(np.abs(vePV)-1)
+FaseVePV = np.angle(vePV)*180/np.pi*1000
+meanDabsVePV = np.mean(DabsVePV, axis=0)
+meanFaseVePV = np.mean(FaseVePV, axis=0)
+
+fig, axes = plt.subplots(1,2,figsize=(15 * 2 / 2.54, 5 * 2 / 2.54))
+axes[0].plot(t / 60, np.transpose(DabsVePV))
+axes[0].plot(t / 60, np.transpose(meanDabsVePV),linestyle=':')
+axes[1].plot(t / 60, np.transpose(FaseVePV))
+axes[1].plot(t / 60, np.transpose(meanFaseVePV),linestyle=':')
+
+fig.legend(legendnamesPVmean, loc='center', ncol=NPV+1, bbox_to_anchor=(0.5, -0.1), frameon=False)
+
+axes[0].set_title('Voltage dev. at reg. nodes')
+axes[1].set_title('Voltage phases at reg. nodes')
+
+axes[0].text(-0.1, 1.07, 'a)', transform=axes[0].transAxes, fontsize=14, va='top', ha='left')
+axes[1].text(-0.1, 1.07, 'b)', transform=axes[1].transAxes, fontsize=14, va='top', ha='left')
+
+axes[0].set_ylabel(r'$\Delta V (‰)$')
+axes[1].set_ylabel(r'$\angle V (10^{-3}\times 1\degree)$')
+
+axes[0].set_ylim(np.min(DabsVePV[:,len(DabsVePV.T)//2:]), np.max(DabsVePV[:,len(DabsVePV.T)//2:]))
+
+
+for ax in axes.flat:
+    ax.set_xlim(0, t[-1]/60)
+    ax.grid(True)
+    ax.set_xticks(custom_ticks)
+    ax.set_xticklabels(custom_labels)
+    ax.set_xlabel('Day Time (hrs)')
+fig.tight_layout()
+
+file_name = 'droop_V_PV'
+fig.savefig(file_name+'.eps', format='eps', bbox_inches='tight')
+########################################################
+P_PV = np.real(np.squeeze(S*bars0))
+Q_PV = np.imag(np.squeeze(S*bars0))
+
+fig, axes = plt.subplots(1,2,figsize=(15 * 2 / 2.54, 5 * 2 / 2.54))
+axes[0].plot(t / 60, np.transpose(P_PV))
+axes[1].plot(t / 60, np.transpose(Q_PV))
+
+fig.legend(legendnamesPV, loc='center', ncol=NPV, bbox_to_anchor=(0.5, -0.1), frameon=False)
+
+axes[0].set_title('Active power at reg. nodes')
+axes[1].set_title('Reactive power at reg. nodes')
+
+axes[0].text(-0.1, 1.07, 'a)', transform=axes[0].transAxes, fontsize=14, va='top', ha='left')
+axes[1].text(-0.1, 1.07, 'b)', transform=axes[1].transAxes, fontsize=14, va='top', ha='left')
+
+axes[0].set_ylabel(r'$P_{Reg} (kW)$')
+axes[1].set_ylabel(r'$Q_{Reg} (kVA)$')
+
+for ax in axes.flat:
+    ax.set_xlim(0, t[-1]/60)
+    ax.grid(True)
+    ax.set_xticks(custom_ticks)
+    ax.set_xticklabels(custom_labels)
+    ax.set_xlabel('Day Time (hrs)')
+fig.tight_layout()
+
+file_name = 'droop_P_PV'
 fig.savefig(file_name+'.eps', format='eps', bbox_inches='tight')

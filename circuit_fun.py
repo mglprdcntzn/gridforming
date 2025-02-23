@@ -214,9 +214,9 @@ def print_circuit(nodes, lines, plt_name,cts_data,pv):
     ax.plot(legendx, legendy-200, 'o', color='black')
     ax.plot(legendx, legendy-400, 'o', color='orange')
     
-    ax.text(legendx+70, legendy, ': PV nodes', fontsize=12, ha='left', va='center',color='black') 
-    ax.text(legendx+70, legendy-200, ': PQ-Load only nodes', fontsize=12, ha='left', va='center',color='black') 
-    ax.text(legendx+70, legendy-400, ': PQ-Load and DG nodes', fontsize=12, ha='left', va='center',color='black') 
+    ax.text(legendx+70, legendy, ': Regulation nodes', fontsize=12, ha='left', va='center',color='black') 
+    ax.text(legendx+70, legendy-200, ': Non Reg. Load only nodes', fontsize=12, ha='left', va='center',color='black') 
+    ax.text(legendx+70, legendy-400, ': Non Reg. Load and DG nodes', fontsize=12, ha='left', va='center',color='black') 
     
     #data legend coordinates
     datax = right-20
@@ -226,8 +226,8 @@ def print_circuit(nodes, lines, plt_name,cts_data,pv):
     
     #draw ct data    
     ax.text(datax, datay, 
-            'Number of PQ nodes: '+str(N-NPV)+'\n'+
-            'Number of PV nodes: '+str(NPV)+'\n'+
+            'Number of Non Reg. nodes: '+str(N-NPV)+'\n'+
+            'Number of Reg. nodes: '+str(NPV)+'\n'+
             'Total Rated Load: '+str(Sload)+' MVA\n'+
             'Total installed DG: '+str(Sdg)+' MVA\n'+
             'Total length: '+str(length)+' km',
