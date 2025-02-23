@@ -1,12 +1,12 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Simulation files
 Miguel Parada Contzen
-Conce, December 2024
+Conce, Frebruary 2025
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 The files contained in this folder are for computing the examples in the paper
 
-	Parada Contzen, Miguel. 'Power sharing and voltage regulation control for grid forming of future distribution circuits with multiple voltage references', 2024.
+	Parada Contzen, Miguel. 'Power sharing and voltage regulation control for grid forming of future distribution circuits with multiple voltage references', 2025.
 
 All the simulation figures in the paper are obtained using conventional desktop hardware and the following Python 3.10 scripts:
 
